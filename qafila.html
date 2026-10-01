@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Qafila — Attar distilled at source</title>
+<meta name="description" content="Qafila distils oud, frankincense and rose where they grow, ages every batch a full year in glass, and ships alcohol-free attar worldwide." />
+<meta name="theme-color" content="#17110F" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   QAFILA — design tokens
+   ink/soot/bark  : resin-brown ground, not a tinted grey-black
+   bone/mist      : warm paper + muted text
+   plum           : the single brand accent (smoke)
+   amber          : appears only inside glass artwork, never as UI
+   ============================================================ */
+:root{
+  --ink:#17110F;
+  --soot:#221917;
+  --bark:#33241F;
+  --bone:#EFE9E0;
+  --paper:#F6F2EB;
+  --mist:#A99C93;
+  --plum:#6B3A50;
+  --plum-lift:#8A4D67;
+  --amber:#C07A2E;
+
+  --line:rgba(239,233,224,.14);
+  --line-dark:rgba(23,17,15,.13);
+
+  --display:"Bodoni Moda",Georgia,"Times New Roman",serif;
+  --ui:"Jost","Helvetica Neue",Arial,sans-serif;
+
+  --shell:min(1240px,92vw);
+  --gutter:clamp(1.2rem,4vw,2.6rem);
+  --sect:clamp(5rem,11vw,9.5rem);
+
+  --r-sm:3px;
+  --r-md:10px;
+  --r-pill:999px;
+
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+
+/* ---------- reset ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;background:var(--ink);color:var(--bone);
+  font-family:var(--ui);font-weight:300;font-size:clamp(1rem,.96rem + .2vw,1.08rem);
+  line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+img,svg{display:block;max-width:100%}
+button,input,select{font:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4,p,figure,blockquote{margin:0}
+ul{margin:0;padding:0;list-style:none}
+
+/* ---------- type scale ---------- */
+.d1{font-family:var(--display);font-weight:400;font-size:clamp(2.9rem,1.3rem + 6.6vw,6.6rem);line-height:.96;letter-spacing:-.022em}
+.d2{font-family:var(--display);font-weight:400;font-size:clamp(2.1rem,1.2rem + 3.3vw,3.9rem);line-height:1.04;letter-spacing:-.018em}
+.d3{font-family:var(--display);font-weight:400;font-size:clamp(1.5rem,1.15rem + 1.3vw,2.05rem);line-height:1.12;letter-spacing:-.012em}
+.lede{font-size:clamp(1.06rem,1rem + .45vw,1.28rem);line-height:1.62;color:#D9D0C6;max-width:52ch}
+.body-muted{color:var(--mist);max-width:62ch}
+.fine{font-size:.82rem;letter-spacing:.04em;color:var(--mist)}
+.ital{font-family:var(--display);font-style:italic;font-weight:400}
+
+/* ---------- layout ---------- */
+.shell{width:var(--shell);margin-inline:auto}
+.section{padding-block:var(--sect);position:relative}
+.on-paper{background:var(--paper);color:var(--ink)}
+.on-paper .body-muted{color:#6C5F57}
+.on-paper .fine{color:#7A6C63}
+.on-paper .lede{color:#3A2C26}
+
+.grain::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:var(--grain);opacity:.05;mix-blend-mode:overlay;z-index:2;
+}
+
+/* header rows: hairline + small caption, used instead of all-caps eyebrows */
+.sect-head{display:grid;gap:1.1rem;max-width:46ch;margin-bottom:clamp(2.6rem,5vw,4.2rem)}
+.rule-note{display:flex;align-items:center;gap:.85rem;font-size:.8rem;letter-spacing:.05em;color:var(--mist)}
+.rule-note::before{content:"";width:34px;height:1px;background:currentColor;opacity:.55;flex:none}
+
+/* ---------- buttons ---------- */
+.btn{
+  --bg:var(--plum);--fg:#F7F1EC;--bd:transparent;
+  display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+  padding:.95rem 1.7rem;border:1px solid var(--bd);border-radius:var(--r-pill);
+  background:var(--bg);color:var(--fg);font-size:.94rem;font-weight:400;letter-spacing:.02em;
+  cursor:pointer;position:relative;overflow:hidden;isolation:isolate;
+  transition:transform .45s var(--ease),background .45s var(--ease),color .45s var(--ease),border-color .45s var(--ease);
+}
+.btn::before{
+  content:"";position:absolute;inset:0;z-index:-1;background:var(--plum-lift);
+  transform:translateY(101%);transition:transform .5s var(--ease);
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:hover::before{transform:translateY(0)}
+.btn-ghost{--bg:transparent;--fg:var(--bone);--bd:var(--line)}
+.btn-ghost::before{background:rgba(239,233,224,.1)}
+.btn-ghost:hover{border-color:rgba(239,233,224,.4)}
+.btn-dark{--bg:var(--ink);--fg:var(--bone)}
+.btn-dark::before{background:var(--plum)}
+.btn-sm{padding:.66rem 1.2rem;font-size:.86rem}
+
+/* animated underline link */
+.link-u{position:relative;display:inline-block;padding-bottom:3px}
+.link-u::after{
+  content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:currentColor;
+  transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease);
+}
+.link-u:hover::after,.link-u:focus-visible::after{transform:scaleX(1);transform-origin:left}
+
+:where(a,button,input,select,summary):focus-visible{
+  outline:2px solid var(--plum-lift);outline-offset:3px;border-radius:2px;
+}
+.skip{position:absolute;left:-9999px;top:0;z-index:99;background:var(--bone);color:var(--ink);padding:.8rem 1.2rem}
+.skip:focus{left:1rem;top:1rem}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav{position:fixed;inset:0 0 auto;z-index:50;transition:background .5s var(--ease),border-color .5s var(--ease),backdrop-filter .5s var(--ease);border-bottom:1px solid transparent}
+.nav-in{width:var(--shell);margin-inline:auto;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding-block:1.35rem;transition:padding .5s var(--ease)}
+.nav.is-stuck{background:rgba(23,17,15,.82);backdrop-filter:blur(14px) saturate(1.2);border-bottom-color:var(--line)}
+.nav.is-stuck .nav-in{padding-block:.8rem}
+
+.brand{display:flex;align-items:center;gap:.7rem}
+.brand-mark{width:30px;height:30px;flex:none;color:var(--plum-lift)}
+.brand-word{font-family:var(--display);font-size:1.32rem;letter-spacing:.24em;padding-left:.24em}
+.brand-sub{font-size:.62rem;letter-spacing:.3em;color:var(--mist);display:block;margin-top:2px;padding-left:.3em}
+
+.nav-links{display:flex;align-items:center;gap:clamp(1.2rem,2.4vw,2.3rem)}
+.nav-links a{font-size:.92rem;color:#D3C9C0}
+.nav-right{display:flex;align-items:center;gap:1rem}
+
+.burger{display:none;width:44px;height:44px;border:1px solid var(--line);background:transparent;border-radius:var(--r-pill);place-items:center;cursor:pointer}
+.burger span{display:block;width:17px;height:1px;background:var(--bone);transition:transform .4s var(--ease),opacity .3s}
+.burger span+span{margin-top:5px}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+.drawer{
+  position:fixed;inset:0;z-index:45;background:rgba(23,17,15,.97);backdrop-filter:blur(10px);
+  display:grid;align-content:center;gap:.4rem;padding:6rem var(--gutter) 3rem;
+  opacity:0;visibility:hidden;transition:opacity .45s var(--ease),visibility .45s;
+}
+.drawer.is-open{opacity:1;visibility:visible}
+.drawer a{font-family:var(--display);font-size:clamp(2rem,9vw,2.9rem);padding-block:.42rem;border-bottom:1px solid var(--line);
+  opacity:0;transform:translateY(14px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.drawer.is-open a{opacity:1;transform:none}
+.drawer.is-open a:nth-child(1){transition-delay:.08s}
+.drawer.is-open a:nth-child(2){transition-delay:.14s}
+.drawer.is-open a:nth-child(3){transition-delay:.2s}
+.drawer.is-open a:nth-child(4){transition-delay:.26s}
+.drawer .btn{margin-top:2rem;justify-self:start}
+
+@media (max-width:920px){
+  .nav-links,.nav-right .btn{display:none}
+  .burger{display:grid}
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding-block:9rem 4rem;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(2rem,5vw,4.5rem);align-items:center;width:100%}
+
+/* atmosphere */
+.haze{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+.haze-a{width:46vw;height:46vw;right:-6vw;top:4vh;background:radial-gradient(circle,rgba(192,122,46,.26),transparent 66%)}
+.haze-b{width:40vw;height:40vw;left:-12vw;bottom:-12vh;background:radial-gradient(circle,rgba(107,58,80,.34),transparent 68%)}
+.haze-c{width:30vw;height:30vw;right:16vw;bottom:-6vh;background:radial-gradient(circle,rgba(192,122,46,.14),transparent 70%)}
+.drift-a{animation:drift 22s var(--ease) infinite alternate}
+.drift-b{animation:drift 28s var(--ease) infinite alternate-reverse}
+@keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-3vw,4vh,0) scale(1.14)}}
+
+.hero-copy{position:relative;z-index:3;max-width:40ch}
+.origin-list{display:grid;gap:.42rem;margin-bottom:2rem}
+.origin-list li{display:grid;grid-template-columns:78px 1fr;gap:1rem;align-items:baseline;font-size:.82rem;letter-spacing:.04em;color:var(--mist);
+  border-top:1px solid var(--line);padding-top:.42rem}
+.origin-list li span:last-child{color:#CFC5BB}
+
+.hero h1{margin-bottom:1.6rem}
+.hero h1 .ln{display:block;overflow:hidden}
+.hero h1 .ln i{display:block;font-style:normal}
+.hero .lede{margin-bottom:2.3rem}
+.hero-cta{display:flex;flex-wrap:wrap;gap:.9rem;margin-bottom:2.8rem}
+
+.trust{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;padding-top:1.5rem;border-top:1px solid var(--line)}
+.stars{display:flex;gap:3px;color:var(--amber)}
+.stars svg{width:14px;height:14px}
+.trust-div{width:1px;height:26px;background:var(--line)}
+
+/* hero vial artwork */
+.hero-art{position:relative;z-index:2;display:grid;place-items:center;min-height:min(70vh,560px)}
+.pedestal{position:absolute;bottom:8%;width:min(78%,420px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 60%,rgba(192,122,46,.22),rgba(107,58,80,.12) 44%,transparent 68%);
+  filter:blur(26px);animation:breathe 7.5s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.72;transform:scale(1)}50%{opacity:1;transform:scale(1.07)}}
+.vial-wrap{position:relative;width:min(62%,300px);will-change:transform}
+.vial-float{animation:float 9s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(-8px)}50%{transform:translateY(10px)}}
+.smoke{position:absolute;left:50%;bottom:74%;width:170px;height:260px;transform:translateX(-50%);opacity:.5;pointer-events:none}
+.smoke path{stroke:rgba(239,233,224,.4);fill:none;stroke-width:1}
+.smoke path:nth-child(1){animation:wisp 11s ease-in-out infinite}
+.smoke path:nth-child(2){animation:wisp 13s ease-in-out infinite reverse}
+.smoke path:nth-child(3){animation:wisp 9.5s ease-in-out infinite .6s}
+@keyframes wisp{0%{opacity:0;transform:translateY(24px) scaleX(.9)}35%{opacity:.75}100%{opacity:0;transform:translateY(-52px) scaleX(1.2)}}
+
+.scroll-hint{position:absolute;left:50%;bottom:2.2rem;transform:translateX(-50%);z-index:3;display:grid;justify-items:center;gap:.6rem}
+.scroll-hint .bar{width:1px;height:46px;background:linear-gradient(var(--line),transparent);position:relative;overflow:hidden}
+.scroll-hint .bar::after{content:"";position:absolute;inset:0;background:var(--bone);animation:trace 2.6s var(--ease) infinite}
+@keyframes trace{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
+
+@media (max-width:920px){
+  .hero-grid{grid-template-columns:1fr;gap:3rem}
+  .hero-art{min-height:380px;order:2}
+  .scroll-hint{display:none}
+}
+
+/* page-load orchestration */
+.reveal-load{opacity:0;transform:translateY(22px)}
+.loaded .reveal-load{opacity:1;transform:none;transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.loaded .rl-1{transition-delay:.15s}
+.loaded .rl-2{transition-delay:.28s}
+.loaded .rl-3{transition-delay:.4s}
+.loaded .rl-4{transition-delay:.52s}
+.loaded .rl-5{transition-delay:.64s}
+.loaded .rl-6{transition-delay:.76s}
+
+/* ============================================================
+   MARQUEE STRIP
+   ============================================================ */
+.strip{border-block:1px solid var(--line);background:var(--soot);overflow:hidden;padding-block:1.05rem}
+.strip-track{display:flex;gap:3.5rem;width:max-content;animation:slide 38s linear infinite}
+.strip:hover .strip-track{animation-play-state:paused}
+.strip-track span{font-family:var(--display);font-size:1rem;letter-spacing:.12em;color:#8B7F76;white-space:nowrap;display:flex;align-items:center;gap:3.5rem}
+.strip-track span::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--plum-lift);flex:none}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ============================================================
+   STORY + ROUTE
+   ============================================================ */
+.story-grid{display:grid;grid-template-columns:1fr 1.02fr;gap:clamp(2.4rem,6vw,5.5rem);align-items:center}
+.story-copy p+p{margin-top:1.1rem}
+.sig{font-family:var(--display);font-style:italic;font-size:1.5rem;margin-top:2rem;color:var(--ink)}
+.sig small{display:block;font-family:var(--ui);font-style:normal;font-size:.78rem;letter-spacing:.06em;color:#7A6C63;margin-top:.3rem}
+
+.route{background:var(--ink);border-radius:var(--r-md);padding:clamp(1.6rem,3.5vw,2.6rem);position:relative;overflow:hidden}
+.route::after{content:"";position:absolute;inset:0;background-image:var(--grain);opacity:.06;pointer-events:none}
+.route h3{font-family:var(--display);font-size:1.3rem;color:var(--bone);margin-bottom:.4rem}
+.route p{color:var(--mist);font-size:.88rem;margin-bottom:1.4rem}
+.route svg{width:100%;height:auto}
+.route .path-line{fill:none;stroke:var(--plum-lift);stroke-width:1.4;stroke-dasharray:6 7;stroke-dashoffset:900;transition:stroke-dashoffset 2.6s var(--ease)}
+.route.is-in .path-line{stroke-dashoffset:0}
+.route .stop{fill:var(--amber)}
+.route .stop-ring{fill:none;stroke:rgba(192,122,46,.45);stroke-width:1}
+.route text{fill:#C5BAB1;font-family:var(--ui);font-size:11px;letter-spacing:.08em}
+
+/* process steps — a genuine sequence, so numerals earn their place */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-dark);border-block:1px solid var(--line-dark);margin-top:clamp(3rem,6vw,5rem)}
+.step{background:var(--paper);padding:clamp(1.4rem,2.6vw,2rem) clamp(1rem,2vw,1.6rem);transition:background .5s var(--ease)}
+.step:hover{background:#FBF8F3}
+.step-n{font-family:var(--display);font-size:1.1rem;color:var(--plum);margin-bottom:1.1rem}
+.step h4{font-size:1.02rem;font-weight:400;margin-bottom:.4rem}
+.step p{font-size:.88rem;color:#6C5F57;line-height:1.55}
+
+@media (max-width:900px){
+  .story-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* ============================================================
+   COLLECTION
+   ============================================================ */
+.coll-head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;flex-wrap:wrap;margin-bottom:clamp(2.4rem,5vw,3.6rem)}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(1rem,1.8vw,1.5rem)}
+.card{
+  position:relative;border:1px solid var(--line);border-radius:var(--r-md);background:linear-gradient(170deg,#241A17,#1B1412);
+  padding:1.4rem 1.4rem 1.5rem;display:flex;flex-direction:column;overflow:hidden;isolation:isolate;
+  transition:transform .55s var(--ease),border-color .55s var(--ease),box-shadow .55s var(--ease);
+}
+.card::before{
+  content:"";position:absolute;left:50%;top:14%;width:74%;aspect-ratio:1;transform:translateX(-50%) scale(.6);
+  background:radial-gradient(circle,var(--glow,rgba(192,122,46,.4)),transparent 66%);filter:blur(30px);
+  opacity:0;transition:opacity .6s var(--ease),transform .6s var(--ease);z-index:-1;
+}
+.card:hover,.card:focus-within{transform:translateY(-8px);border-color:rgba(239,233,224,.3);box-shadow:0 26px 50px -30px rgba(0,0,0,.9)}
+.card:hover::before,.card:focus-within::before{opacity:1;transform:translateX(-50%) scale(1)}
+.card-tag{position:absolute;top:1rem;right:1rem;font-size:.68rem;letter-spacing:.09em;color:#CFC5BB;border:1px solid var(--line);border-radius:var(--r-pill);padding:.24rem .62rem}
+.card-art{display:grid;place-items:center;padding-block:1.4rem 1.6rem}
+.card-art svg{width:96px;height:auto;transition:transform .6s var(--ease)}
+.card:hover .card-art svg{transform:translateY(-5px) rotate(-2deg)}
+.card h3{font-family:var(--display);font-size:1.22rem;margin-bottom:.3rem}
+.card .notes{font-size:.84rem;color:var(--mist);min-height:2.7em;margin-bottom:1.1rem}
+.card-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-top:1rem;border-top:1px solid var(--line)}
+.price{font-family:var(--display);font-size:1.18rem}
+.price small{font-family:var(--ui);font-size:.72rem;color:var(--mist);letter-spacing:.05em;display:block;margin-top:2px}
+.add{border:1px solid var(--line);background:transparent;border-radius:var(--r-pill);padding:.52rem 1rem;font-size:.84rem;cursor:pointer;
+  transition:background .4s var(--ease),color .4s var(--ease),border-color .4s var(--ease)}
+.add:hover{background:var(--bone);color:var(--ink);border-color:var(--bone)}
+.add[data-added="true"]{background:var(--plum);border-color:var(--plum);color:#F7F1EC}
+
+@media (max-width:1040px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.cards{grid-template-columns:1fr}}
+
+/* ============================================================
+   WHY / ADVANTAGES
+   ============================================================ */
+.why{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(1.6rem,3vw,2.6rem)}
+.why-item{padding-top:1.4rem;border-top:1px solid var(--line-dark)}
+.why-item svg{width:26px;height:26px;color:var(--plum);margin-bottom:1.1rem;stroke-width:1.1}
+.why-item h3{font-size:1.06rem;font-weight:400;margin-bottom:.45rem}
+.why-item p{font-size:.9rem;color:#6C5F57;line-height:1.6}
+@media (max-width:880px){.why{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.why{grid-template-columns:1fr}}
+
+/* ============================================================
+   MATERIALS GALLERY (asymmetric mosaic)
+   ============================================================ */
+.mosaic{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:clamp(110px,15vw,170px);gap:clamp(.6rem,1.2vw,1rem)}
+.tile{position:relative;border-radius:var(--r-md);overflow:hidden;cursor:pointer;background:var(--soot)}
+.tile-1{grid-column:span 2;grid-row:span 2}
+.tile-2{grid-column:span 2;grid-row:span 1}
+.tile-3{grid-column:span 2;grid-row:span 2}
+.tile-4{grid-column:span 2;grid-row:span 1}
+.tile-5{grid-column:span 3;grid-row:span 1}
+.tile-6{grid-column:span 3;grid-row:span 1}
+.tile .surface{position:absolute;inset:0;transition:transform .9s var(--ease),filter .9s var(--ease)}
+.tile:hover .surface{transform:scale(1.07);filter:saturate(1.15) brightness(1.06)}
+.tile::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(23,17,15,.72),transparent 58%);opacity:.9}
+.tile figcaption{position:absolute;left:1rem;bottom:.9rem;right:1rem;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem}
+.tile figcaption strong{font-family:var(--display);font-weight:400;font-size:1.05rem}
+.tile figcaption em{font-style:normal;font-size:.76rem;color:var(--mist);letter-spacing:.05em;
+  opacity:0;transform:translateY(8px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.tile:hover figcaption em{opacity:1;transform:none}
+
+.s-agarwood{background:
+  repeating-linear-gradient(74deg,rgba(0,0,0,.42) 0 2px,transparent 2px 7px),
+  repeating-linear-gradient(74deg,rgba(239,233,224,.05) 0 1px,transparent 1px 13px),
+  linear-gradient(140deg,#3C2A20,#1A1210 70%)}
+.s-resin{background:
+  radial-gradient(circle at 34% 34%,rgba(232,168,80,.85),transparent 42%),
+  radial-gradient(circle at 68% 66%,rgba(192,122,46,.6),transparent 48%),
+  linear-gradient(150deg,#4A2C12,#1C1410)}
+.s-rose{background:
+  radial-gradient(circle at 50% 52%,rgba(178,86,118,.7),transparent 46%),
+  conic-gradient(from 210deg at 50% 52%,rgba(107,58,80,.55),rgba(30,20,24,.9),rgba(107,58,80,.5)),
+  #1E1418}
+.s-sand{background:
+  repeating-linear-gradient(8deg,rgba(239,233,224,.07) 0 1px,transparent 1px 16px),
+  linear-gradient(165deg,#8A7358,#42332A 72%,#1E1613)}
+.s-smoke{background:
+  radial-gradient(ellipse at 22% 70%,rgba(239,233,224,.22),transparent 52%),
+  radial-gradient(ellipse at 76% 30%,rgba(107,58,80,.55),transparent 56%),
+  linear-gradient(120deg,#241A20,#141010)}
+.s-brass{background:
+  repeating-conic-gradient(from 0deg at 62% 40%,rgba(192,122,46,.36) 0deg 6deg,transparent 6deg 14deg),
+  radial-gradient(circle at 62% 40%,rgba(226,176,104,.55),transparent 54%),
+  linear-gradient(140deg,#3A2A1C,#171110)}
+
+@media (max-width:820px){
+  .mosaic{grid-template-columns:repeat(2,1fr)}
+  .tile-1,.tile-2,.tile-3,.tile-4{grid-column:span 1;grid-row:span 1}
+  .tile-1,.tile-3{grid-row:span 2}
+  .tile-5,.tile-6{grid-column:span 2}
+}
+
+/* ============================================================
+   TESTIMONIALS
+   ============================================================ */
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1rem,2vw,1.6rem)}
+.quote{border:1px solid var(--line);border-radius:var(--r-md);padding:clamp(1.5rem,2.6vw,2.1rem);display:flex;flex-direction:column;gap:1.3rem;
+  background:linear-gradient(175deg,rgba(239,233,224,.045),transparent);transition:border-color .5s var(--ease),transform .5s var(--ease)}
+.quote:hover{border-color:rgba(239,233,224,.28);transform:translateY(-4px)}
+.quote blockquote{font-family:var(--display);font-size:1.12rem;line-height:1.5;color:#E4DCD3}
+.quote .mark{font-family:var(--display);font-size:2.6rem;line-height:.6;color:var(--plum-lift)}
+.who{display:flex;align-items:center;gap:.85rem;margin-top:auto;padding-top:1.1rem;border-top:1px solid var(--line)}
+.initials{width:40px;height:40px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:.95rem;
+  background:rgba(107,58,80,.35);border:1px solid var(--line)}
+.who b{font-weight:400;font-size:.95rem;display:block}
+.who span{font-size:.78rem;color:var(--mist)}
+@media (max-width:900px){.quotes{grid-template-columns:1fr}}
+
+/* ============================================================
+   STATS
+   ============================================================ */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+.stat{background:var(--ink);padding:clamp(1.8rem,3.4vw,2.6rem) clamp(1rem,2vw,1.6rem)}
+.stat .n{font-family:var(--display);font-size:clamp(2.3rem,1.4rem + 2.6vw,3.6rem);line-height:1;letter-spacing:-.02em;display:flex;align-items:baseline;gap:.08em}
+.stat .n sup{font-size:.42em;top:-.7em;position:relative;color:var(--plum-lift)}
+.stat p{font-size:.85rem;color:var(--mist);margin-top:.7rem;max-width:22ch}
+@media (max-width:880px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* ============================================================
+   CTA + FORM
+   ============================================================ */
+.cta{position:relative;overflow:hidden;background:var(--soot)}
+.cta .haze{filter:blur(110px)}
+.cta-grid{position:relative;z-index:3;display:grid;grid-template-columns:1fr 1fr;gap:clamp(2.4rem,6vw,5rem);align-items:center}
+.field{display:grid;gap:.45rem;margin-bottom:1.1rem}
+.field label{font-size:.82rem;letter-spacing:.04em;color:var(--mist)}
+.field input,.field select{
+  background:rgba(239,233,224,.05);border:1px solid var(--line);border-radius:var(--r-sm);padding:.9rem 1rem;
+  font-size:.96rem;font-weight:300;transition:border-color .4s var(--ease),background .4s var(--ease)}
+.field input::placeholder{color:#7A6C63}
+.field input:focus,.field select:focus{outline:none;border-color:var(--plum-lift);background:rgba(239,233,224,.08)}
+.field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mist) 50%),linear-gradient(135deg,var(--mist) 50%,transparent 50%);
+  background-position:calc(100% - 20px) 52%,calc(100% - 14px) 52%;background-size:6px 6px;background-repeat:no-repeat}
+.field select option{background:var(--ink)}
+.err{font-size:.78rem;color:#E29A8C;min-height:1.1em}
+.field.invalid input,.field.invalid select{border-color:#C9705F}
+.form-note{font-size:.78rem;color:var(--mist);margin-top:.9rem}
+.form-done{display:none;border:1px solid var(--line);border-radius:var(--r-md);padding:1.6rem;background:rgba(107,58,80,.18)}
+.form-done.show{display:block;animation:pop .5s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (max-width:900px){.cta-grid{grid-template-columns:1fr}}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.foot{background:var(--ink);border-top:1px solid var(--line);padding-block:clamp(3.4rem,6vw,5rem) 2rem}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.4fr;gap:clamp(1.8rem,4vw,3rem)}
+.foot h4{font-size:.86rem;font-weight:400;letter-spacing:.06em;color:#CFC5BB;margin-bottom:1.1rem}
+.foot li+li{margin-top:.55rem}
+.foot a,.foot address{font-size:.9rem;color:var(--mist);font-style:normal;line-height:1.7}
+.foot a:hover{color:var(--bone)}
+.news{display:flex;gap:.5rem;margin-top:.9rem}
+.news input{flex:1;min-width:0;background:rgba(239,233,224,.05);border:1px solid var(--line);border-radius:var(--r-pill);padding:.72rem 1.1rem;font-size:.88rem}
+.news input:focus{outline:none;border-color:var(--plum-lift)}
+.news button{flex:none}
+.news-msg{font-size:.78rem;color:var(--plum-lift);margin-top:.6rem;min-height:1.1em}
+.foot-base{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;flex-wrap:wrap;
+  margin-top:clamp(2.6rem,5vw,4rem);padding-top:1.5rem;border-top:1px solid var(--line);font-size:.82rem;color:var(--mist)}
+.foot-base nav{display:flex;gap:1.4rem}
+@media (max-width:880px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.foot-grid{grid-template-columns:1fr}}
+
+/* ============================================================
+   SCROLL REVEAL + MOTION PREFERENCES
+   ============================================================ */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .85s var(--ease),transform .85s var(--ease);transition-delay:calc(var(--i,0)*90ms)}
+.rv.is-in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .rv,.reveal-load{opacity:1;transform:none}
+  .route .path-line{stroke-dashoffset:0}
+}
+
+/* ===== v2: photographic product shots, BDT store, cart ===== */
+.card::before{display:none}
+.card{padding:0;background:var(--soot);border-radius:6px}
+.card:hover,.card:focus-within{transform:translateY(-4px);box-shadow:0 22px 40px -28px rgba(0,0,0,.85)}
+.shot{aspect-ratio:4/5;position:relative;display:grid;place-items:center;overflow:hidden;border-radius:6px 6px 0 0}
+.shot svg{width:72%;height:auto;transition:transform .8s var(--ease)}
+.shot img{width:100%;height:100%;object-fit:cover}
+.shot.light{background:radial-gradient(ellipse 80% 55% at 50% 38%,#fdfaf5,#ebe3d6 62%,#d6cbba)}
+.shot.dark{background:radial-gradient(ellipse 80% 55% at 50% 36%,#54433b,#251c19 62%,#110c0b)}
+.shot::after{content:"";position:absolute;inset:0;background-image:var(--grain);opacity:.09;mix-blend-mode:multiply;pointer-events:none}
+.shot.dark::after{mix-blend-mode:overlay;opacity:.16}
+.card:hover .shot svg{transform:scale(1.035)}
+.card-tag{z-index:3;top:.9rem;right:.9rem;background:var(--ink);border-color:transparent}
+.card-body{padding:1.2rem 1.3rem 1.4rem;display:flex;flex-direction:column;flex:1}
+.card .fam{font-size:.78rem;color:var(--mist);margin-bottom:.4rem}
+.cartbtn{display:inline-flex;align-items:center;gap:.55rem;border:1px solid var(--line);background:transparent;border-radius:var(--r-pill);padding:.6rem 1rem;cursor:pointer;font-size:.88rem}
+.cartbtn span{min-width:1.5em;height:1.5em;border-radius:99px;background:var(--plum);display:grid;place-items:center;font-size:.74rem}
+.ovl{position:fixed;inset:0;background:rgba(10,7,6,.62);z-index:59}.ovl[hidden]{display:none}
+.cart{position:fixed;top:0;right:0;bottom:0;width:min(440px,100vw);z-index:60;background:var(--soot);border-left:1px solid var(--line);display:flex;flex-direction:column;transform:translateX(100%);visibility:hidden;transition:transform .5s var(--ease),visibility 0s .5s}
+.cart.is-open{transform:none;visibility:visible;transition-delay:0s}
+.cart-h{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 1.4rem;border-bottom:1px solid var(--line)}
+.cx{background:none;border:1px solid var(--line);border-radius:99px;padding:.45rem 1rem;cursor:pointer;font-size:.85rem}
+.cart-b{padding:1.4rem;overflow:auto;flex:1;display:flex;flex-direction:column;gap:1.1rem}
+.cl{display:grid;gap:.9rem}
+.ci{display:grid;grid-template-columns:1fr auto auto;gap:.9rem;align-items:center;padding-bottom:.9rem;border-bottom:1px solid var(--line)}
+.ci b{font-weight:400;display:block}.ci div span{font-size:.8rem;color:var(--mist)}
+.q{display:flex;align-items:center;gap:.4rem;border:1px solid var(--line);border-radius:99px;padding:.12rem .25rem}
+.q button{width:28px;height:28px;border:0;background:none;cursor:pointer;font-size:1.1rem}
+.q span{min-width:1.2em;text-align:center;font-size:.9rem}
+.ci .lp{min-width:4.4rem;text-align:right;font-family:var(--display)}
+.tot{margin:0;display:grid;gap:.5rem}.tot div{display:flex;justify-content:space-between;font-size:.92rem}.tot dd{margin:0}
+.tot .grand{font-family:var(--display);font-size:1.25rem;padding-top:.7rem;border-top:1px solid var(--line)}
+.pay{border:1px solid var(--line);border-radius:6px;padding:.8rem 1rem;display:grid;gap:.55rem;margin:0 0 1.1rem}
+.pay legend{font-size:.82rem;color:var(--mist);padding:0 .4rem}.pay label{display:flex;gap:.6rem;align-items:center;font-size:.92rem}.pay input{accent-color:var(--plum-lift)}
+.back{background:none;border:0;color:var(--mist);cursor:pointer;align-self:flex-start;padding:0;font-size:.88rem}
+@media(max-width:560px){.shot{aspect-ratio:1/1}.shot svg{width:60%}}
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top" aria-label="Qafila, home">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <circle cx="5" cy="22" r="2.4" fill="currentColor"/>
+        <circle cx="16" cy="16" r="2.4" fill="currentColor"/>
+        <circle cx="27" cy="10" r="2.4" fill="currentColor"/>
+        <path d="M5 22C9 15 12 12 16 16s7 2 11-6" stroke="currentColor" stroke-width="1.1" stroke-dasharray="3 3.5"/>
+      </svg>
+      <span>
+        <span class="brand-word">QAFILA</span>
+        <span class="brand-sub">ATTAR HOUSE</span>
+      </span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a class="link-u" href="#collection">Collection</a>
+      <a class="link-u" href="#method">Method</a>
+      <a class="link-u" href="#materials">Materials</a>
+      <a class="link-u" href="#reviews">Reviews</a>
+    </nav>
+
+    <div class="nav-right">
+      <button class="cartbtn" id="cartBtn" type="button" aria-label="Open cart">Cart <span id="cartCount">0</span></button><a class="btn btn-sm" href="#samples">Order a sample set</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" hidden>
+  <a href="#collection">Collection</a>
+  <a href="#method">Method</a>
+  <a href="#materials">Materials</a>
+  <a href="#reviews">Reviews</a>
+  <a class="btn" href="#samples">Order a sample set</a>
+</div>
+
+<main id="main">
+
+<!-- ===================== HERO ===================== -->
+<section class="hero grain" id="top">
+  <div class="haze haze-a drift-a" aria-hidden="true"></div>
+  <div class="haze haze-b drift-b" aria-hidden="true"></div>
+  <div class="haze haze-c drift-a" aria-hidden="true"></div>
+
+  <div class="shell hero-grid">
+    <div class="hero-copy">
+      <ul class="origin-list reveal-load rl-1">
+        <li><span>Dhofar</span><span>Hojari frankincense, hand-graded</span></li>
+        <li><span>Jorhat</span><span>Wild agarwood, 24-month rest</span></li>
+        <li><span>Taif</span><span>Rose, cut before sunrise</span></li>
+      </ul>
+
+      <h1 class="d1">
+        <span class="ln reveal-load rl-2"><i>Attar carried</i></span>
+        <span class="ln reveal-load rl-3"><i class="ital">the long way.</i></span>
+      </h1>
+
+      <p class="lede reveal-load rl-4">We distil where the material grows, rest every batch a full year in glass, and bottle it undiluted. No alcohol, no carrier oil, no shortcut through a fragrance lab.</p>
+
+      <div class="hero-cta reveal-load rl-5">
+        <a class="btn" href="#collection">Explore the collection</a>
+        <a class="btn btn-ghost" href="#samples">Try six for ৳450</a>
+      </div>
+
+      <div class="trust reveal-load rl-6">
+        <div class="stars" aria-hidden="true">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 5.6 6 .8-4.4 4.2 1.1 6.1L10 14.8 4.7 17.7l1.1-6.1L1.4 7.4l6-.8z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 5.6 6 .8-4.4 4.2 1.1 6.1L10 14.8 4.7 17.7l1.1-6.1L1.4 7.4l6-.8z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 5.6 6 .8-4.4 4.2 1.1 6.1L10 14.8 4.7 17.7l1.1-6.1L1.4 7.4l6-.8z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 5.6 6 .8-4.4 4.2 1.1 6.1L10 14.8 4.7 17.7l1.1-6.1L1.4 7.4l6-.8z"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 5.6 6 .8-4.4 4.2 1.1 6.1L10 14.8 4.7 17.7l1.1-6.1L1.4 7.4l6-.8z"/></svg>
+        </div>
+        <span class="fine">4.9 from 2,148 verified buyers</span>
+        <span class="trust-div" aria-hidden="true"></span>
+        <span class="fine">Dispatched from Dhaka within 48 hours</span>
+      </div>
+    </div>
+
+    <!-- hero artwork: hand-drawn vial, no external images -->
+    <div class="hero-art reveal-load rl-3">
+      <div class="pedestal" aria-hidden="true"></div>
+      <div class="vial-wrap" id="vialWrap">
+        <svg class="smoke" viewBox="0 0 170 260" aria-hidden="true">
+          <path d="M85 250C60 210 108 196 84 156 62 120 100 104 85 70"/>
+          <path d="M66 250C46 214 84 198 62 164 44 132 76 116 64 84"/>
+          <path d="M106 250C88 212 124 200 104 168 86 138 116 122 106 92"/>
+        </svg>
+
+        <div class="vial-float" id="heroBottle"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint" aria-hidden="true">
+    <span class="bar"></span>
+    <span class="fine">Scroll</span>
+  </div>
+</section>
+
+<!-- ===================== STRIP ===================== -->
+<div class="strip" aria-hidden="true">
+  <div class="strip-track">
+    <span>Single-origin distillation</span><span>Alcohol-free oil</span><span>Aged 12 months minimum</span><span>Batch-numbered</span><span>Free delivery over ৳3,000</span>
+    <span>Single-origin distillation</span><span>Alcohol-free oil</span><span>Aged 12 months minimum</span><span>Batch-numbered</span><span>Free delivery over ৳3,000</span>
+  </div>
+</div>
+
+<!-- ===================== STORY / METHOD ===================== -->
+<section class="section on-paper" id="method">
+  <div class="shell">
+    <div class="story-grid">
+      <div class="story-copy rv">
+        <p class="rule-note">Founded 2007, Muscat</p>
+        <h2 class="d2" style="margin:.9rem 0 1.4rem">We buy the tree, not the bottle.</h2>
+        <p class="body-muted">Most attar sold today is bought finished, in drums, from a broker who will not name the forest. Qafila started because our founder could not get a straight answer about a single kilo of agarwood.</p>
+        <p class="body-muted">So we went to the source instead. Today we hold standing agreements with four growing regions, run our own copper stills in Salalah and Jorhat, and keep every distillation under a batch number you can look up on the vial.</p>
+        <p class="body-muted">Nothing leaves before it has rested a year. Fresh oil is loud; a rested oil settles into something you can wear all day.</p>
+        <p class="sig">Ahmed Al-Balushi<small>Founder &amp; head distiller</small></p>
+      </div>
+
+      <figure class="route rv" id="route" style="margin:0">
+        <h3>The route, still walked</h3>
+        <p>Four origins, one caravan. Each vial names the leg it came from.</p>
+        <svg viewBox="0 0 520 300" role="img" aria-label="Map showing the sourcing route from Dhofar to Taif to Jorhat, shipped from Dhaka">
+          <path class="path-line" d="M60 236C120 186 150 250 214 196s62-118 128-124c52-5 74 34 100 44"/>
+          <g class="stop-ring"><circle cx="60" cy="236" r="11"/><circle cx="214" cy="196" r="11"/><circle cx="342" cy="72" r="11"/><circle cx="442" cy="116" r="11"/></g>
+          <g class="stop"><circle cx="60" cy="236" r="4.5"/><circle cx="214" cy="196" r="4.5"/><circle cx="342" cy="72" r="4.5"/><circle cx="442" cy="116" r="4.5"/></g>
+          <text x="60" y="266" text-anchor="middle">DHOFAR</text>
+          <text x="214" y="228" text-anchor="middle">SALALAH STILL</text>
+          <text x="342" y="52" text-anchor="middle">TAIF</text>
+          <text x="442" y="146" text-anchor="middle">DHAKA</text>
+        </svg>
+      </figure>
+    </div>
+
+    <!-- genuine sequence, so numerals are informative here -->
+    <ol class="steps">
+      <li class="step rv" style="--i:0"><p class="step-n">01</p><h4>Harvest</h4><p>Resin is tapped by the same families we have bought from since 2009, in season only.</p></li>
+      <li class="step rv" style="--i:1"><p class="step-n">02</p><h4>Distil</h4><p>Copper stills, low heat, long runs. A single oud batch takes eleven days.</p></li>
+      <li class="step rv" style="--i:2"><p class="step-n">03</p><h4>Rest</h4><p>Twelve to twenty-four months in dark glass until the top notes stop shouting.</p></li>
+      <li class="step rv" style="--i:3"><p class="step-n">04</p><h4>Fill</h4><p>Hand-filled, batch-numbered, sealed the week it ships to you.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===================== COLLECTION ===================== -->
+<section class="section grain" id="collection">
+  <div class="shell">
+    <div class="coll-head">
+      <div class="sect-head rv" style="margin:0">
+        <p class="rule-note">Current release, batch 41</p>
+        <h2 class="d2">Eight attars from four origins</h2>
+      </div>
+      <a class="link-u rv" href="#samples">See all twelve attars</a>
+    </div>
+
+    <div class="cards" id="grid"></div>
+  </div>
+</section>
+
+<!-- ===================== WHY ===================== -->
+<section class="section on-paper">
+  <div class="shell">
+    <div class="sect-head rv">
+      <p class="rule-note">What you are actually buying</p>
+      <h2 class="d2">Four things most attar sellers will not put in writing</h2>
+    </div>
+
+    <div class="why">
+      <div class="why-item rv" style="--i:0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M12 3s6 6.4 6 10.5A6 6 0 0 1 6 13.5C6 9.4 12 3 12 3z"/><path d="M9.5 14.5a2.6 2.6 0 0 0 2.5 2"/></svg>
+        <h3>Pure oil, nothing added</h3>
+        <p>No alcohol, no DPG, no carrier. What is in the vial is what came out of the still.</p>
+      </div>
+      <div class="why-item rv" style="--i:1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M7 3h10M7 21h10"/><path d="M8 3v3.6c0 2 4 3.4 4 5.4s-4 3.4-4 5.4V21"/><path d="M16 3v3.6c0 2-4 3.4-4 5.4s4 3.4 4 5.4V21"/></svg>
+        <h3>Rested, never rushed</h3>
+        <p>Twelve months minimum in glass. The batch number on your vial tells you the exact fill date.</p>
+      </div>
+      <div class="why-item rv" style="--i:2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M3 20c2.5-9 8-13 18-13"/><path d="M14 7h7v7"/><path d="M3 20h6"/></svg>
+        <h3>The origin is named</h3>
+        <p>Region, season and distiller are printed on every label. You can check the claim.</p>
+      </div>
+      <div class="why-item rv" style="--i:3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M9 3h6v4l4 12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L9 7z"/><path d="M7.4 14h9.2"/></svg>
+        <h3>Sample before you commit</h3>
+        <p>Six 1 ml vials for ৳450, refunded in full against your first full-size order.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MATERIALS GALLERY ===================== -->
+<section class="section grain" id="materials">
+  <div class="shell">
+    <div class="sect-head rv">
+      <p class="rule-note">Raw material archive</p>
+      <h2 class="d2">Everything begins as something you could hold</h2>
+    </div>
+
+    <div class="mosaic">
+      <figure class="tile tile-1 rv" style="--i:0"><div class="surface s-agarwood"></div><figcaption><strong>Agarwood</strong><em>Jorhat, Assam</em></figcaption></figure>
+      <figure class="tile tile-2 rv" style="--i:1"><div class="surface s-resin"></div><figcaption><strong>Hojari resin</strong><em>Dhofar, Oman</em></figcaption></figure>
+      <figure class="tile tile-3 rv" style="--i:2"><div class="surface s-rose"></div><figcaption><strong>Taif rose</strong><em>Cut before sunrise</em></figcaption></figure>
+      <figure class="tile tile-4 rv" style="--i:3"><div class="surface s-sand"></div><figcaption><strong>Sandalwood</strong><em>Mysore, aged 8 years</em></figcaption></figure>
+      <figure class="tile tile-5 rv" style="--i:4"><div class="surface s-smoke"></div><figcaption><strong>Bakhoor chips</strong><em>House grind, batch 41</em></figcaption></figure>
+      <figure class="tile tile-6 rv" style="--i:5"><div class="surface s-brass"></div><figcaption><strong>Copper still</strong><em>Salalah workshop</em></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TESTIMONIALS ===================== -->
+<section class="section" id="reviews" style="background:var(--soot)">
+  <div class="shell">
+    <div class="sect-head rv">
+      <p class="rule-note">2,148 verified reviews</p>
+      <h2 class="d2">What regulars say after the second bottle</h2>
+    </div>
+
+    <div class="quotes">
+      <figure class="quote rv" style="--i:0">
+        <span class="mark" aria-hidden="true">&ldquo;</span>
+        <blockquote>I wore the Jorhat oud to a wedding and spent the evening explaining what it was. Three people ordered before the night ended.</blockquote>
+        <figcaption class="who"><span class="initials" aria-hidden="true">TR</span><span><b>Tanvir Rahman</b><span>Dhaka · customer since 2021</span></span></figcaption>
+      </figure>
+      <figure class="quote rv" style="--i:1">
+        <span class="mark" aria-hidden="true">&ldquo;</span>
+        <blockquote>The sample set is the honest part. I tried six, disliked two, and they still put the ৳450 straight onto my full bottle.</blockquote>
+        <figcaption class="who"><span class="initials" aria-hidden="true">MC</span><span><b>Mahin Chowdhury</b><span>Chattogram · 4 orders</span></span></figcaption>
+      </figure>
+      <figure class="quote rv" style="--i:2">
+        <span class="mark" aria-hidden="true">&ldquo;</span>
+        <blockquote>Hojari No. 7 lasts nine hours on my wrist and never turns sharp. I have stopped buying anything with alcohol in it.</blockquote>
+        <figcaption class="who"><span class="initials" aria-hidden="true">IS</span><span><b>Imran Sheikh</b><span>Sylhet · customer since 2022</span></span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STATS ===================== -->
+<section class="stats" aria-label="Qafila by the numbers">
+  <div class="stat rv" style="--i:0"><p class="n"><span data-count="19">0</span></p><p>Years distilling under our own roof</p></div>
+  <div class="stat rv" style="--i:1"><p class="n"><span data-count="12400" data-suffix="+">0</span></p><p>Vials delivered across 64 districts</p></div>
+  <div class="stat rv" style="--i:2"><p class="n"><span data-count="4.9" data-decimals="1">0</span><sup>/5</sup></p><p>Average rating across 2,148 reviews</p></div>
+  <div class="stat rv" style="--i:3"><p class="n"><span data-count="48">0</span><sup>h</sup></p><p>From order to dispatch, Dhaka warehouse</p></div>
+</section>
+
+<!-- ===================== CTA / FORM ===================== -->
+<section class="section cta grain" id="samples">
+  <div class="haze haze-b drift-b" aria-hidden="true" style="left:auto;right:-10vw;top:-10vh"></div>
+  <div class="shell cta-grid">
+    <div class="rv">
+      <p class="rule-note">Sample set — 6 × 1 ml</p>
+      <h2 class="d2" style="margin:.9rem 0 1.3rem">Start with ৳450, spend it on the bottle you actually want.</h2>
+      <p class="lede">Tell us roughly what you like and we will choose six oils for you. The full ৳450 comes off your first full-size order, whenever you place it.</p>
+      <ul class="origin-list" style="margin-top:2rem">
+        <li><span>Ships in</span><span>48 hours, tracked, across Bangladesh</span></li>
+        <li><span>Included</span><span>Origin card and batch numbers for each vial</span></li>
+        <li><span>If unsure</span><span>Reply to the confirmation email and we will swap any two</span></li>
+      </ul>
+    </div>
+
+    <div class="rv" style="--i:1">
+      <form id="sampleForm" novalidate>
+        <div class="field">
+          <label for="f-name">Name</label>
+          <input id="f-name" name="name" type="text" placeholder="Your full name" autocomplete="name" required />
+          <span class="err" data-err-for="f-name" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+          <span class="err" data-err-for="f-email" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="f-pref">What do you usually reach for?</label>
+          <select id="f-pref" name="pref" required>
+            <option value="">Choose a direction</option>
+            <option>Woody and smoky</option>
+            <option>Resinous and clean</option>
+            <option>Floral over sandalwood</option>
+            <option>Spiced house blends</option>
+            <option>Surprise me</option>
+          </select>
+          <span class="err" data-err-for="f-pref" aria-live="polite"></span>
+        </div>
+        <button class="btn" type="submit" style="width:100%">Send my sample set</button>
+        <p class="form-note">Demo form — nothing is submitted anywhere. No payment is taken at this step.</p>
+      </form>
+
+      <div class="form-done" id="formDone" role="status">
+        <h3 class="d3" style="margin-bottom:.6rem">Your set is reserved</h3>
+        <p class="body-muted" style="color:#D9D0C6">We have six vials with your name on them. Check your inbox for the origin card and tracking link within 48 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="shell">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="#top" aria-label="Qafila, back to top">
+          <svg class="brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <circle cx="5" cy="22" r="2.4" fill="currentColor"/><circle cx="16" cy="16" r="2.4" fill="currentColor"/><circle cx="27" cy="10" r="2.4" fill="currentColor"/>
+            <path d="M5 22C9 15 12 12 16 16s7 2 11-6" stroke="currentColor" stroke-width="1.1" stroke-dasharray="3 3.5"/>
+          </svg>
+          <span><span class="brand-word">QAFILA</span><span class="brand-sub">ATTAR HOUSE</span></span>
+        </a>
+        <p class="body-muted" style="color:var(--mist);font-size:.9rem;margin-top:1.2rem;max-width:34ch">Distilled in Salalah and Jorhat. Rested a year. Bottled by hand in Dhaka.</p><p class="fine" style="margin-top:.9rem;max-width:36ch">Delivery: Dhaka in 1–2 working days (৳70), other districts in 3–5 days (৳130). Free over ৳3,000. Pay by Cash on Delivery, bKash or Nagad (demo only).</p>
+      </div>
+
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a class="link-u" href="#collection">Full collection</a></li>
+          <li><a class="link-u" href="#samples">Sample sets</a></li>
+          <li><a class="link-u" href="#collection">Bakhoor &amp; chips</a></li>
+          <li><a class="link-u" href="#samples">Gift boxes</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>House</h4>
+        <ul>
+          <li><a class="link-u" href="#method">Our method</a></li>
+          <li><a class="link-u" href="#materials">Material archive</a></li>
+          <li><a class="link-u" href="#reviews">Reviews</a></li>
+          <li><a class="link-u" href="#samples">Wholesale</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Stay in touch</h4>
+        <address>
+          House 14, Road 3, Banani, Dhaka<br />
+          <a class="link-u" href="mailto:salam@qafila.example">salam@qafila.example</a><br />
+          <a class="link-u" href="tel:+8801700000000">+880 1700-000000</a>
+        </address>
+        <form class="news" id="newsForm" novalidate>
+          <label class="skip" for="f-news">Email for batch notices</label>
+          <input id="f-news" type="email" placeholder="Email for new batch notices" required />
+          <button class="btn btn-sm" type="submit">Notify me</button>
+        </form>
+        <p class="news-msg" id="newsMsg" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <div class="foot-base">
+      <p>© 2026 Qafila Attar House. Demo store by NAS Development. Not a real shop; no orders are processed.</p>
+      <nav aria-label="Legal and social">
+        <a class="link-u" href="#top">Privacy</a>
+        <a class="link-u" href="#top">Terms</a>
+        <a class="link-u" href="#top">Instagram</a>
+        <a class="link-u" href="#top">WhatsApp</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+
+<aside class="cart" id="cart" aria-label="Shopping cart" aria-hidden="true"><div class="cart-h"><h2 class="d3">Your cart</h2><button class="cx" id="cartX" type="button" aria-label="Close cart">Close</button></div><div class="cart-b" id="cartBody"></div></aside>
+<div class="ovl" id="ovl" hidden></div>
+<script>
+/* STORE DATA. To use a real photograph for any product, add  img:"images/name.jpg"  to its entry
+   (4:5 portrait works best). If the file fails to load, the rendered bottle is shown instead. */
+(function(){
+"use strict";
+var fmt=function(n){return "৳"+n.toLocaleString("en-US")};
+var P=[
+{n:"Hojari No. 7",lab:"HOJARI NO.7",s:12,p:890,f:"Fresh · resinous",notes:"Green frankincense, dry lemon peel, cold stone",t:"light",g:"#9fb4b8",o:.16,l:["#f2e2a8","#c8a24e"],c:"steel",lv:150,tag:"Best seller"},
+{n:"Dahn al Oud Jorhat",lab:"OUD JORHAT",s:3,p:1950,f:"Woody · smoky",notes:"Wet forest floor, leather, smoked plum",t:"dark",g:"#2a1d17",o:.55,l:["#8a5a2c","#2d1608"],c:"wood",lv:172,lb:"#d9cdb8",tag:"24-month rest"},
+{n:"Taif Rose",lab:"TAIF ROSE",s:6,p:650,f:"Floral · soft",notes:"Rose over sandalwood, honey, a green stem",t:"light",g:"#c9a0a8",o:.2,l:["#e7b3b9","#a85f72"],c:"bronze",lv:158,tag:"Spring cut"},
+{n:"Mukhallat Qafila",lab:"MUKHALLAT",s:12,p:1150,f:"Oriental · spiced",notes:"Oud, saffron, myrrh and cedar",t:"dark",g:"#7a4a1e",o:.4,l:["#d28a3a","#6b3414"],c:"bronze",lv:150,tag:"Signature"},
+{n:"Tahara White Musk",lab:"WHITE MUSK",s:6,p:380,f:"Musk · clean",notes:"White musk, cotton flower, soft amber",t:"light",g:"#c6ced0",o:.14,l:["#f6f3ea","#e2dccb"],c:"steel",lv:160,tag:"New"},
+{n:"Amber Sultani",lab:"AMBER SULTANI",s:6,p:540,f:"Amber · warm",notes:"Benzoin, labdanum, golden amber, a trace of vanilla",t:"dark",g:"#1a1210",o:.7,l:["#a8641e","#40200c"],c:"black",lv:166,lb:"#e9e0d0"},
+{n:"Bergamot Nahar",lab:"BERGAMOT",s:3,p:290,f:"Fresh · citrus",notes:"Bergamot, cardamom pod, vetiver, clean cedar",t:"light",g:"#a9c0b4",o:.16,l:["#e6e8a6","#a9b66a"],c:"steel",lv:158,tag:"Daytime"},
+{n:"Sandal Mysore",lab:"SANDAL",s:3,p:340,f:"Woody · spiced",notes:"Creamy sandalwood, cardamom, a thread of saffron",t:"dark",g:"#14100e",o:.75,l:["#c9915a","#6b3d1c"],c:"wood",lv:164,lb:"#e9e0d0"}
+];
+var D="Dhaka,Gazipur,Narayanganj,Narsingdi,Manikganj,Munshiganj,Tangail,Kishoreganj,Faridpur,Gopalganj,Madaripur,Rajbari,Shariatpur,Chattogram,Cox's Bazar,Cumilla,Feni,Noakhali,Lakshmipur,Chandpur,Brahmanbaria,Khagrachhari,Rangamati,Bandarban,Sylhet,Moulvibazar,Habiganj,Sunamganj,Rajshahi,Bogura,Pabna,Sirajganj,Natore,Naogaon,Chapainawabganj,Joypurhat,Khulna,Jashore,Satkhira,Bagerhat,Kushtia,Narail,Magura,Jhenaidah,Chuadanga,Meherpur,Barishal,Bhola,Patuakhali,Pirojpur,Jhalokati,Barguna,Rangpur,Dinajpur,Kurigram,Gaibandha,Lalmonirhat,Nilphamari,Thakurgaon,Panchagarh,Mymensingh,Jamalpur,Netrokona,Sherpur".split(",");
+
+/* Rendered studio-style bottle: layered glass, liquid, meniscus, caps, label, contact shadow, floor reflection */
+function bottle(p,i,hero){
+ var u="b"+i+(hero?"h":""),L=p.lv,B="M50 140q0-24 24-26h52q24 2 24 26v112q0 22-22 24H72q-22-2-22-24z",
+ C={steel:["#7d8082","#f4f5f5","#5d5f61"],bronze:["#6e4e2a","#e0b97f","#4e3419"],black:["#0f0b0a","#4d4543","#080605"],wood:["#5a3b22","#a97c4f","#3a2412"]}[p.c],
+ st=function(o,c,a){return '<stop offset="'+o+'" stop-color="'+c+'" stop-opacity="'+a+'"/>'},
+ gl=[[0,p.o+.4],[.14,p.o],[.5,p.o*.5],[.86,p.o],[1,p.o+.45]].map(function(a){return st(a[0],p.g,a[1])}).join(""),
+ T='font-family="Jost,Arial,sans-serif" text-anchor="middle" fill="#241a16"';
+ return `<svg viewBox="0 0 200 320" role="img" aria-label="${p.n}, ${p.s} ml attar bottle"><defs>
+<linearGradient id="${u}a">${gl}</linearGradient>
+<linearGradient id="${u}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${p.l[0]}"/><stop offset="1" stop-color="${p.l[1]}"/></linearGradient>
+<linearGradient id="${u}c">${st(0,"#000",.55)}${st(.22,"#000",0)}${st(.6,"#fff",.1)}${st(1,"#000",.6)}</linearGradient>
+<linearGradient id="${u}d">${st(0,C[0],1)}${st(.3,C[1],1)}${st(.58,C[2],1)}${st(.82,C[1],1)}${st(1,C[0],1)}</linearGradient>
+<linearGradient id="${u}e" gradientUnits="userSpaceOnUse" x1="0" y1="276" x2="0" y2="214">${st(0,"#fff",.34)}${st(1,"#fff",0)}</linearGradient>
+<clipPath id="${u}f"><path d="${B}"/></clipPath><mask id="${u}m"><rect width="200" height="320" fill="url(#${u}e)"/></mask>
+<filter id="${u}x"><feGaussianBlur stdDeviation="1.5"/></filter><filter id="${u}y"><feGaussianBlur stdDeviation="6"/></filter></defs>
+<ellipse cx="100" cy="279" rx="60" ry="7" fill="#000" opacity="${p.t=="light"?.3:.65}" filter="url(#${u}y)"/>
+<g id="${u}g"><rect x="86" y="94" width="28" height="26" fill="url(#${u}a)"/><path d="${B}" fill="url(#${u}a)"/>
+<g clip-path="url(#${u}f)"><rect x="40" y="${L}" width="120" height="130" fill="url(#${u}b)"/><ellipse cx="100" cy="${L}" rx="52" ry="4.5" fill="${p.l[0]}" opacity=".9"/><ellipse cx="102" cy="262" rx="30" ry="6" fill="${p.l[0]}" opacity=".45" filter="url(#${u}x)"/></g>
+<path d="${B}" fill="url(#${u}c)"/>
+<path d="M56 142q0-18 18-20h52q18 2 18 20v108q0 16-16 18H72q-16-2-16-18z" fill="none" stroke="#fff" stroke-opacity=".1"/>
+<rect x="56" y="256" width="88" height="12" rx="5" fill="#fff" opacity=".06"/>
+<path d="${B}" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1.1"/>
+<rect x="67" y="172" width="66" height="64" rx="1.5" fill="${p.lb||"#efe8dc"}"/><rect x="67" y="172" width="66" height="64" fill="url(#${u}c)" opacity=".5"/>
+<text x="100" y="192" ${T} font-family="Bodoni Moda,Georgia,serif" font-size="9.5" letter-spacing="2.6">QAFILA</text>
+<path d="M88 198h24" stroke="#241a16" stroke-opacity=".5" stroke-width=".6"/>
+<text x="100" y="212" ${T} font-size="5.6" letter-spacing="1.3">${p.lab}</text>
+<text x="100" y="228" ${T} font-size="5" letter-spacing=".8" opacity=".7">${p.s} ML · ATTAR</text>
+<path d="M58 146q0-14 12-17v118q-12-3-12-14z" fill="#fff" opacity=".26" filter="url(#${u}x)"/>
+<rect x="139" y="142" width="3" height="100" rx="1.5" fill="#fff" opacity=".32"/>
+<path d="M76 119h48" stroke="#fff" stroke-opacity=".55" stroke-width="1.4" stroke-linecap="round"/>
+<rect x="80" y="92" width="40" height="11" rx="2" fill="url(#${u}d)"/><rect x="78" y="22" width="44" height="72" rx="5" fill="url(#${u}d)"/>
+${p.c=="wood"?'<path d="M84 30c4 14-3 28 2 60M96 26c-3 20 4 36-1 66M108 28c4 16-2 34 3 62" stroke="#2a180b" stroke-opacity=".35" fill="none"/>':'<path d="M78 34h44M78 86h44" stroke="#000" stroke-opacity=".25"/>'}
+<rect x="84" y="25" width="4" height="66" rx="2" fill="#fff" opacity=".2" filter="url(#${u}x)"/></g>
+<use href="#${u}g" transform="translate(0,552) scale(1,-1)" mask="url(#${u}m)"/></svg>`;
+}
+
+var grid=document.getElementById("grid");
+grid.innerHTML=P.map(function(p,i){return `<article class="card rv" style="--i:${i%4}">${p.tag?`<span class="card-tag">${p.tag}</span>`:""}<div class="shot ${p.t}" data-i="${i}">${p.img?`<img src="${p.img}" alt="${p.n} attar, ${p.s} ml" loading="lazy" width="800" height="1000">`:bottle(p,i)}</div><div class="card-body"><p class="fam">${p.f}</p><h3>${p.n}</h3><p class="notes">${p.notes}</p><div class="card-foot"><span class="price">${fmt(p.p)}<small>${p.s} ml</small></span><button class="add" type="button" data-k="${i}">Add to cart</button></div></div></article>`}).join("");
+grid.querySelectorAll(".shot img").forEach(function(im){im.addEventListener("error",function(){var s=im.parentNode;s.innerHTML=bottle(P[s.dataset.i],s.dataset.i)})});
+document.getElementById("heroBottle").innerHTML=bottle(P[3],"hero",1);
+
+/* ---- cart + demo checkout (BDT, no real payments) ---- */
+var cart={},view="cart",dist="",cEl=document.getElementById("cart"),cb=document.getElementById("cartBody"),ovl=document.getElementById("ovl"),last=null;
+function cnt(){return Object.keys(cart).reduce(function(a,k){return a+cart[k]},0)}
+function sub(){return Object.keys(cart).reduce(function(a,k){return a+P[k].p*cart[k]},0)}
+function ship(){var s=sub();return !s||s>=3000||!dist?0:(dist=="Dhaka"?70:130)}
+function tot(){var s=sub(),d=ship(),dl=sub()>=3000?"Free":(view=="cart"||!dist)?"Set by district":fmt(d);return `<div><dt>Subtotal</dt><dd>${fmt(s)}</dd></div><div><dt>Delivery</dt><dd>${dl}</dd></div><div class="grand"><dt>Total</dt><dd>${fmt(s+d)}</dd></div>`}
+function count(){document.getElementById("cartCount").textContent=cnt()}
+function draw(){
+ count();if(view=="done")return;
+ if(!cnt()){view="cart";cb.innerHTML='<p class="body-muted">Your cart is empty.</p><a class="btn" href="#collection" data-x>Browse the collection</a>';return}
+ var ls=Object.keys(cart).map(function(k){return `<li class="ci"><div><b>${P[k].n}</b><span>${P[k].s} ml · ${fmt(P[k].p)}</span></div><div class="q"><button type="button" data-d="-1" data-k="${k}" aria-label="Remove one ${P[k].n}">−</button><span>${cart[k]}</span><button type="button" data-d="1" data-k="${k}" aria-label="Add one ${P[k].n}">+</button></div><span class="lp">${fmt(P[k].p*cart[k])}</span></li>`}).join("");
+ cb.innerHTML=`<ul class="cl">${ls}</ul><dl class="tot">${tot()}</dl><p class="fine">Delivery ৳70 inside Dhaka, ৳130 elsewhere. Free over ৳3,000.</p><button class="btn" type="button" data-go="checkout" style="width:100%">Checkout</button>`;
+}
+function F(id,l,x){return `<div class="field"><label for="${id}">${l}</label><input id="${id}" ${x}><span class="err" aria-live="polite"></span></div>`}
+function co(){
+ view="checkout";
+ cb.innerHTML=`<button class="back" type="button" data-go="cart">Back to cart</button><form id="co" novalidate>${F("c-n","Full name",'autocomplete="name"')}${F("c-p","Mobile number",'type="tel" inputmode="tel" placeholder="01XXXXXXXXX" autocomplete="tel"')}<div class="field"><label for="c-d">District</label><select id="c-d"><option value="">Select district</option>${D.map(function(d){return "<option>"+d+"</option>"}).join("")}</select><span class="err" aria-live="polite"></span></div>${F("c-a","Thana / area",'placeholder="e.g. Banani"')}${F("c-s","Address",'placeholder="House, road, block"')}<fieldset class="pay"><legend>Payment (demo)</legend>${["Cash on Delivery","bKash","Nagad"].map(function(m,i){return `<label><input type="radio" name="pay" value="${m}"${i?"":" checked"}> ${m}</label>`}).join("")}</fieldset><dl class="tot" id="tot">${tot()}</dl><button class="btn" type="submit" style="width:100%;margin-top:1.1rem">Place demo order</button><p class="form-note">Demo checkout: no payment is taken and nothing is shipped. Never enter real bKash or Nagad details here.</p></form>`;
+}
+cb.addEventListener("change",function(e){if(e.target.id=="c-d"){dist=e.target.value;document.getElementById("tot").innerHTML=tot()}});
+cb.addEventListener("submit",function(e){
+ e.preventDefault();var ok=true,R=[["c-n",function(v){return v.length>1},"Enter your full name."],["c-p",function(v){return /^(\+?88)?01[3-9]\d{8}$/.test(v.replace(/[\s-]/g,""))},"Use a Bangladeshi mobile number, e.g. 01712345678."],["c-d",function(v){return !!v},"Choose a district."],["c-a",function(v){return v.length>1},"Enter your thana or area."],["c-s",function(v){return v.length>4},"Enter your house and road."]];
+ R.forEach(function(r){var i=document.getElementById(r[0]),g=r[1](i.value.trim());i.closest(".field").classList.toggle("invalid",!g);i.nextElementSibling.textContent=g?"":r[2];if(!g&&ok){ok=false;i.focus()}});
+ if(!ok)return;
+ var m=document.querySelector('input[name="pay"]:checked').value,t=sub()+ship(),id="QF-"+(10000+Math.floor(Math.random()*89999));
+ view="done";cart={};
+ cb.innerHTML=`<h3 class="d3">Demo order placed</h3><p class="body-muted">Order ${id} · ${fmt(t)} · ${m}</p><p class="body-muted">A live store would send an SMS confirmation here. Estimated delivery: ${dist=="Dhaka"?"1–2":"3–5"} working days.</p><p class="fine">Demo only. No payment taken, nothing shipped.</p><button class="btn" type="button" data-x>Continue shopping</button>`;
+ dist="";count();
+});
+function open(){last=document.activeElement;if(view=="done")view="cart";draw();cEl.classList.add("is-open");cEl.setAttribute("aria-hidden","false");ovl.hidden=false;document.body.style.overflow="hidden";document.getElementById("cartX").focus()}
+function close(){cEl.classList.remove("is-open");cEl.setAttribute("aria-hidden","true");ovl.hidden=true;document.body.style.overflow="";if(last)last.focus()}
+document.addEventListener("click",function(e){
+ var a=e.target.closest(".add");
+ if(a){var k=a.dataset.k;cart[k]=(cart[k]||0)+1;view="cart";open();return}
+ var q=e.target.closest("[data-d]");
+ if(q){var k2=q.dataset.k;cart[k2]+=+q.dataset.d;if(cart[k2]<1)delete cart[k2];draw();return}
+ var g=e.target.closest("[data-go]");
+ if(g){if(g.dataset.go=="checkout")co();else{view="cart";draw()}return}
+ if(e.target.closest("[data-x]")||e.target===ovl||e.target.closest("#cartX"))close();
+});
+document.getElementById("cartBtn").addEventListener("click",open);
+document.addEventListener("keydown",function(e){if(e.key=="Escape"&&cEl.classList.contains("is-open"))close()});
+draw();
+})();
+</script>
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- page load orchestration ---- */
+  requestAnimationFrame(function () { document.body.classList.add("loaded"); });
+
+  /* ---- sticky nav state ---- */
+  var nav = document.getElementById("nav");
+  var onScroll = function () {
+    nav.classList.toggle("is-stuck", window.scrollY > 40);
+    if (!reduce && vial) {
+      var y = Math.min(window.scrollY, 700);
+      vial.style.transform = "translate3d(0," + (y * 0.07) + "px,0)";
+    }
+  };
+  var vial = document.getElementById("vialWrap");
+  var ticking = false;
+  window.addEventListener("scroll", function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () { onScroll(); ticking = false; });
+  }, { passive: true });
+  onScroll();
+
+  /* ---- mobile drawer ---- */
+  var burger = document.getElementById("burger");
+  var drawer = document.getElementById("drawer");
+  function setMenu(open) {
+    burger.setAttribute("aria-expanded", String(open));
+    burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    drawer.hidden = false;
+    drawer.classList.toggle("is-open", open);
+    document.body.style.overflow = open ? "hidden" : "";
+    if (open) { var f = drawer.querySelector("a"); if (f) f.focus(); }
+  }
+  burger.addEventListener("click", function () {
+    setMenu(burger.getAttribute("aria-expanded") !== "true");
+  });
+  drawer.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") setMenu(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && burger.getAttribute("aria-expanded") === "true") {
+      setMenu(false); burger.focus();
+    }
+  });
+
+  /* ---- scroll reveals ---- */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      en.target.classList.add("is-in");
+      io.unobserve(en.target);
+    });
+  }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
+  document.querySelectorAll(".rv, #route").forEach(function (el) { io.observe(el); });
+
+  /* ---- animated counters ---- */
+  function runCount(el) {
+    var target = parseFloat(el.dataset.count);
+    var dec = parseInt(el.dataset.decimals || "0", 10);
+    var suffix = el.dataset.suffix || "";
+    if (reduce) { el.textContent = target.toLocaleString(undefined, { minimumFractionDigits: dec }) + suffix; return; }
+    var start = performance.now(), dur = 1500;
+    (function tick(now) {
+      var p = Math.min((now - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var val = target * eased;
+      el.textContent = (dec ? val.toFixed(dec) : Math.round(val).toLocaleString()) + (p === 1 ? suffix : "");
+      if (p < 1) requestAnimationFrame(tick);
+    })(start);
+  }
+  var cio = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      runCount(en.target); cio.unobserve(en.target);
+    });
+  }, { threshold: 0.6 });
+  document.querySelectorAll("[data-count]").forEach(function (el) { cio.observe(el); });
+
+  /* ---- add to bag ---- */
+  document.querySelectorAll(".add").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      if (btn.dataset.added === "true") return;
+      var original = btn.textContent;
+      btn.dataset.added = "true";
+      btn.textContent = "Added";
+      setTimeout(function () { btn.dataset.added = "false"; btn.textContent = original; }, 2000);
+    });
+  });
+
+  /* ---- sample form validation ---- */
+  var form = document.getElementById("sampleForm");
+  var done = document.getElementById("formDone");
+  function fail(input, msg) {
+    input.closest(".field").classList.add("invalid");
+    var slot = form.querySelector('[data-err-for="' + input.id + '"]');
+    if (slot) slot.textContent = msg;
+    return false;
+  }
+  function pass(input) {
+    input.closest(".field").classList.remove("invalid");
+    var slot = form.querySelector('[data-err-for="' + input.id + '"]');
+    if (slot) slot.textContent = "";
+    return true;
+  }
+  function check(input) {
+    var v = input.value.trim();
+    if (!v) return fail(input, input.tagName === "SELECT" ? "Pick one so we can choose well." : "This one is needed.");
+    if (input.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return fail(input, "Check the email address.");
+    if (input.id === "f-name" && v.length < 2) return fail(input, "Use at least two characters.");
+    return pass(input);
+  }
+  form.querySelectorAll("input, select").forEach(function (el) {
+    el.addEventListener("blur", function () { check(el); });
+    el.addEventListener("input", function () { if (el.closest(".field").classList.contains("invalid")) check(el); });
+  });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var fields = Array.prototype.slice.call(form.querySelectorAll("input, select"));
+    var ok = fields.map(check).every(Boolean);
+    if (!ok) { var bad = form.querySelector(".invalid input, .invalid select"); if (bad) bad.focus(); return; }
+    form.style.display = "none";
+    done.classList.add("show");
+    done.focus && done.focus();
+  });
+
+  /* ---- newsletter ---- */
+  var news = document.getElementById("newsForm");
+  var newsMsg = document.getElementById("newsMsg");
+  news.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var input = document.getElementById("f-news");
+    var v = input.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) { newsMsg.textContent = "That email does not look right."; return; }
+    newsMsg.textContent = "Done. You will hear from us when batch 42 is filled.";
+    input.value = "";
+  });
+})();
+</script>
+</body>
+</html>
